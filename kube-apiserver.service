@@ -1,0 +1,17 @@
+[Unit]
+After=etcd-member.service flanneld.service
+
+[Service]
+Environment=KUBELET_IMAGE_URL="--insecure-options=image docker://192.168.30.149/library/hyperkube"
+Environment=KUBELET_IMAGE_TAG=v1.9.6_coreos.2
+Environment=KUBELET_IMAGE_ARGS=--exec=/apiserver
+ExecStart=/usr/lib/coreos/kubelet-wrapper \
+  --etcd-servers=http://192.168.30.198:2379 \
+  --insecure-bind-address=0.0.0.0 \
+  --allow-privileged=true \
+  --service-cluster-ip-range=10.244.0.0/16 \
+  --admission-control=NamespaceLifecycle,LimitRanger,DefaultStorageClass,DefaultTolerationSeconds,NodeRestriction,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota \
+  --logtostderr=true --log-dir=/var/log/k8s --v=4
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,16 @@
+[Unit]
+After=docker.service 
+Requires=docker.service 
+
+[Service]
+Environment=KUBELET_IMAGE_URL="--insecure-options=image docker://192.168.30.149/library/hyperkube"
+Environment=KUBELET_IMAGE_TAG=v1.9.6_coreos.2
+Environment=KUBELET_IMAGE_ARGS=--exec=/kubelet
+ExecStart=/usr/lib/coreos/kubelet-wrapper \
+  --allow-privileged=true \
+  --kubeconfig=/etc/kubernetes/kubelet.kubeconfig \
+  --fail-swap-on=false \
+  --logtostderr=true --log-dir=/var/log/k8s --v=4 
+
+[Install]
+WantedBy=multi-user.target

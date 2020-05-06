@@ -1,0 +1,17 @@
+[Unit]
+After=kubelet.service 
+Requires=kubelet.service 
+
+[Service]
+Environment=KUBELET_IMAGE_URL="--insecure-options=image docker://192.168.30.149/library/hyperkube"
+Environment=KUBELET_IMAGE_TAG=v1.9.6_coreos.2
+Environment=KUBELET_IMAGE_ARGS=--exec=/proxy
+ExecStart=/usr/lib/coreos/kubelet-wrapper \
+  --master=http://192.168.30.198:8080 \
+  --cluster-cidr=10.244.0.0/16 \
+  --logtostderr=true --log-dir=/var/log/k8s --v=4
+Restart=on-failure
+LimitNOFILE=65535
+
+[Install]
+WantedBy=multi-user.target

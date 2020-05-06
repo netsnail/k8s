@@ -1,0 +1,14 @@
+[Unit]
+After=kube-controller-manager.service 
+
+[Service]
+Environment=KUBELET_IMAGE_URL="--insecure-options=image docker://192.168.30.149/library/hyperkube"
+Environment=KUBELET_IMAGE_TAG=v1.9.6_coreos.2
+Environment=KUBELET_IMAGE_ARGS=--exec=/scheduler
+ExecStart=/usr/lib/coreos/kubelet-wrapper \
+  --master=http://192.168.30.198:8080 \
+  --leader-elect=true \
+  --logtostderr=true --log-dir=/var/log/k8s --v=4
+
+[Install]
+WantedBy=multi-user.target

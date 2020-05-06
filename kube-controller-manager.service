@@ -1,0 +1,17 @@
+[Unit]
+After=kube-apiserver.service
+
+[Service]
+Environment=KUBELET_IMAGE_URL="--insecure-options=image docker://192.168.30.149/library/hyperkube"
+Environment=KUBELET_IMAGE_TAG=v1.9.6_coreos.2
+Environment=KUBELET_IMAGE_ARGS=--exec=/controller-manager
+ExecStart=/usr/lib/coreos/kubelet-wrapper \
+  --master=http://192.168.30.198:8080 \
+  --leader-elect=true \
+  --address=127.0.0.1 \
+  --cluster-name=k8s \
+  --service-cluster-ip-range=10.244.0.0/16 \
+  --logtostderr=true --log-dir=/var/log/k8s --v=4
+
+[Install]
+WantedBy=multi-user.target
